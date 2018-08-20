@@ -194,7 +194,7 @@ app = new Vue({
                 limit: 1000
             }).then((data) => {
                 alert("tpBlance size")
-                alert(data.rows.size)
+                alert(JSON.stringify(data))
                 this.user_info = data.rows.find(acc => acc.account == this.account.name);
             this.user_credits = this.user_info.credits / 10000;
             }).catch((e)=>{
