@@ -74,7 +74,6 @@ app = new Vue({
                 if(isPc()){
                 this.deposit(new_deposit);
                 }else{
-                    alert(this.tpConnected)
                     if(this.tpConnected){
                         this.tpDeposit(new_deposit);
                     }else {
@@ -252,9 +251,7 @@ app = new Vue({
                 });
         },
         tpDeposit:function (amount) {
-            alert("充值tpDeposit"+ amount)
             amount = new Number(amount).toFixed(4);
-            alert("Number后："+ amount + "帐号" + this.tpAccount.name)
             tp.eosTokenTransfer({
                 from: this.tpAccount.name,
                 to: 'happyeosslot',
@@ -303,7 +300,7 @@ app = new Vue({
                                 }],
                             data: {
                                 account: this.tpAccount.name,
-                                bet:  amount
+                                credits:  amount
                             }
                         }
                     ]
