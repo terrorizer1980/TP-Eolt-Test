@@ -246,6 +246,7 @@ app = new Vue({
                 });
         },
         tpDeposit:function (amount) {
+            alert("充值tpDeposit"+ amount)
             amount = new Number(amount).toFixed(4);
             tp.eosTokenTransfer({
                 from: tpAccount.name,
