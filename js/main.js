@@ -254,15 +254,15 @@ app = new Vue({
                 amount: amount,
                 tokenName: 'EOS',
                 precision: 4,
-                contract: 'happyeosslot',
+                contract: 'eosio.token',
                 memo: 'TokenPocket test'
-            }).then(function (data) {
+            }).then((data) => {
                 alert("充值结果"+JSON.stringify(data))
-                if(data.result){
-                    alert("充值成功："+ amount)
-                }else{
-                    alert("充值失败")
-                }
+            if(data.data.result){
+                alert("充值成功："+ amount)
+            }else{
+                alert("充值失败")
+            }
             }).catch((err)=>{
                 alert("异常：" + JSON.stringify(err));
             })
