@@ -247,6 +247,7 @@ app = new Vue({
         tpDeposit:function (amount) {
             alert("充值tpDeposit"+ amount)
             amount = new Number(amount).toFixed(4);
+            alert("Number后："+ amount)
             tp.eosTokenTransfer({
                 from: tpAccount.name,
                 to: 'happyeosslot',
@@ -256,6 +257,7 @@ app = new Vue({
                 contract: 'eosio.token',
                 memo: 'TokenPocket test'
             }).then(function (data) {
+                alert("充值结果"+JSON.stringify(data))
                 if(data.result){
                     alert("充值成功："+ amount)
                 }else{
