@@ -264,8 +264,7 @@ app = new Vue({
                 contract: 'eosio.token',
                 memo: 'TokenPocket test'
             }).then((data) => {
-                alert("充值结果"+JSON.stringify(data))
-            if(data.data.result){
+            if(data.result){
                 alert("充值成功："+ amount)
             }else{
                 alert("充值失败")
@@ -391,13 +390,19 @@ app = new Vue({
         start_roll: function () {
             play_se("se_click");
             if (this.running) return;
-            this.init_scatter();
+            if(isPc()){
+                this.init_scatter();
+            }else
+            {
+                this.init_tokenpocket();
+            }
+
             var amount = this.bet_input;
             if (this.bet_input == "") {
                 amount = 1000;
             }
-            var requiredFields = this.requiredFields;
             if(isPc()){
+                var requiredFields = this.requiredFields;
             this.eos.contract('happyeosslot', { requiredFields }).then(contract => {
                 contract.bet(this.account.name, parseInt(amount * 10000), this.createHexRandom(),
                     { authorization: [`${this.account.name}@${this.account.authority}`] })
@@ -416,8 +421,8 @@ app = new Vue({
                 });
             }else
             {
+                alert("帐号："+ JSON.stringify(this.tpAccount))
                 //移动端
-                alert("bet")
                 tp.pushEosAction({
                     actions: [
                         {
@@ -431,7 +436,7 @@ app = new Vue({
                             data: {
                                 account: this.tpAccount.name,
                                 bet:  parseInt(amount * 10000),
-                                speed: app.createHexRandom()
+                                speed: this.createHexRandom()
                             }
                         }
                     ]
