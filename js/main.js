@@ -240,8 +240,7 @@ app = new Vue({
                 .then(() => {
                     play_se("se_buy");
                     this.notification('succeeded', '充值成功');
-                })
-                .catch((err) => {
+                }).catch((err) => {
                     this.notification('error', '充值失败', err.toString());
                 });
         },
@@ -275,12 +274,10 @@ app = new Vue({
                 var requiredFields = this.requiredFields;
                 this.eos.contract('happyeosslot', { requiredFields }).then(contract => {
                     contract.sell(this.account.name, amount, { authorization: [`${this.account.name}@${this.account.authority}`] });
-                })
-                    .then(() => {
+                }).then(() => {
                         play_se("se_withdraw");
                         this.notification('succeeded', '兑换成功');
-                    })
-                    .catch((err) => {
+                    }).catch((err) => {
                         this.notification('error', '兑换失败', err.toString());
                     });
             }else{
@@ -301,12 +298,11 @@ app = new Vue({
                             }
                         }
                     ]
-                }).(() => {
+                }).then(() => {
                     play_se("se_withdraw");
                 this.notification('succeeded', '兑换成功');
                 alert("兑换成功")
-            })
-            .catch((err) => {
+            }).catch((err) => {
                     this.notification('error', '兑换失败', err.toString());
                     alert("兑换失败")
             });
@@ -396,10 +392,8 @@ app = new Vue({
                     }).catch((err) => {
                         alert(err.toString());
                     })
-            })
-                .then(() => {
-                })
-                .catch((err) => {
+            }).then(() => {
+                }).catch((err) => {
                     alert(err.toString());
                 });
             }else
@@ -510,8 +504,6 @@ async function requestId() {
           tp.getWalletList("eos").then(function (data) {
               app.tpAccount = data.wallets.eos[0]
               app.tpBalance();
-
-
            });
           }else{
               alert("请下载TokenPocket")//待完善
