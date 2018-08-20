@@ -436,7 +436,7 @@ app = new Vue({
                             data: {
                                 account: this.tpAccount.name,
                                 bet:  parseInt(amount * 10000),
-                                speed: this.createHexRandom()
+                                seed: this.createHexRandom()
                             }
                         }
                     ]
