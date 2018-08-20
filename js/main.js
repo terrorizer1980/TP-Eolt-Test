@@ -403,9 +403,10 @@ async function requestId() {
        app.tpConnected=tp.isConnected();
           if(app.tpConnected){
               //test
-              app.tpBalance();
+
           tp.getWalletList("eos").then(function (data) {
               app.tpAccount = data.wallets.eos[0]
+              app.tpBalance();
            });
           }else{
               alert("请下载TokenPocket")//待完善
