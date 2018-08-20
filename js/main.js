@@ -29,7 +29,7 @@ app = new Vue({
         prize: -1,    //中奖位置
         running: false, // 正在抽奖
         tpConnected:false,
-        tpFlag:false,
+        tpFlag:"",
         tpAccount:''
     },
     created: function () {
@@ -186,14 +186,14 @@ app = new Vue({
         tpBalance:function () {
 
             tp.getTableRows({
-                json: true,
+                json: "true",
                 code: 'happyeosslot',
                 scope: 'happyeosslot',
-                table: 'table1',
+                table: 'player',
                 // lower_bound: '10',
                 limit: 1000
             }).then((data) => {
-                alert("tpBlance size")
+                this.tpFlag="test1"
                 alert(JSON.stringify(data))
                 this.user_info = data.rows.find(acc => acc.account == this.account.name);
             this.user_credits = this.user_info.credits / 10000;
