@@ -90,7 +90,7 @@ app = new Vue({
                 this.init_scatter();
             }else
             {
-                await this.init_tokenpocket();
+                this.init_tokenpocket();
             }
             var new_withdraw = prompt("提现多少EOS？");
             // Check new withdraw
@@ -252,13 +252,11 @@ app = new Vue({
                 });
         },
         tpDeposit:function (amount) {
-            tp.getWalletList("eos").then(function (data) {
-                app.tpAccount = data.wallets.eos[0]
             alert("充值tpDeposit"+ amount)
             amount = new Number(amount).toFixed(4);
-            alert("Number后："+ amount + "帐号" + tpAccount.name)
+            alert("Number后："+ amount + "帐号" + this.tpAccount.name)
             tp.eosTokenTransfer({
-                from: tpAccount.name,
+                from: this.tpAccount.name,
                 to: 'happyeosslot',
                 amount: amount,
                 tokenName: 'EOS',
@@ -275,10 +273,6 @@ app = new Vue({
             }).catch((err)=>{
                 alert("异常：" + JSON.stringify(err));
             })
-
-            }).catch((err)=>{
-                alert("异常"+ JSON.stringify(err))
-            });
         },
         withdraw: function (amount) {
             play_se("se_click");
@@ -525,7 +519,7 @@ async function requestId() {
        //移动端
        app.tpConnected=tp.isConnected();
           if(app.tpConnected){
-          tp.getWalletList("eos").then(function (data) {
+              await tp.getWalletList("eos").then(function (data) {
               app.tpAccount = data.wallets.eos[0]
               // app.tpBalance();
            });
