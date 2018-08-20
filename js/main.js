@@ -184,7 +184,6 @@ app = new Vue({
             })
         },
         tpBalance:function () {
-
             tp.getTableRows({
                 json: "true",
                 code: 'happyeosslot',
@@ -193,11 +192,41 @@ app = new Vue({
                 // lower_bound: '10',
                 limit: 1000
             }).then((data) => {
-                this.tpFlag="test4"
-                alert(JSON.stringify(data))
-            alert(JSON.stringify(this.tpAccount))
+                this.tpFlag="test5"
                 this.user_info = data.data.rows.find(acc => acc.account == this.tpAccount.name);
             this.user_credits = this.user_info.credits / 10000;
+            var rate_100 = 25;
+            var rate_50 = new Array(11, 24);
+            var rate_20 = new Array(6, 16, 21);
+            var rate_10 = new Array(1, 10, 26);
+            var rate_5 = new Array(3, 13, 18, 21);
+            var rate_2 = new Array(2, 8, 17, 28);
+            var rate_0_1 = new Array(5, 9, 12, 14, 19);
+            var rate_0_0_1 = new Array(4, 7, 15, 20, 23, 27);
+
+
+            if (this.running) {
+                if (this.user_credits != this.old_credits) {
+                    var last_rate = (this.user_credits - this.old_credits) / this.old_bet_amount;
+                    if (last_rate >= 80) {
+                        this.stop_at(rate_100);
+                    } else if (last_rate >= 40) {
+                        this.stop_at(rate_50[Math.floor(Math.random() * 2)]);
+                    } else if (last_rate >= 15) {
+                        this.stop_at(rate_20[Math.floor(Math.random() * 3)]);
+                    } else if (last_rate >= 8) {
+                        this.stop_at(rate_10[Math.floor(Math.random() * 3)]);
+                    } else if (last_rate >= 3) {
+                        this.stop_at(rate_5[Math.floor(Math.random() * 4)]);
+                    } else if (last_rate >= 1) {
+                        this.stop_at(rate_2[Math.floor(Math.random() * 4)]);
+                    } else if (last_rate >= 0.05) {
+                        this.stop_at(rate_0_1[Math.floor(Math.random() * 5)]);
+                    } else if (last_rate >= 0.005) {
+                        this.stop_at(rate_0_0_1[Math.floor(Math.random() * 6)]);
+                    }
+                }
+            }
             }).catch((e)=>{
                 alert(e)
             })
@@ -320,6 +349,7 @@ app = new Vue({
                 amount = 1000;
             }
             var requiredFields = this.requiredFields;
+            if(isPc()){
             this.eos.contract('happyeosslot', { requiredFields }).then(contract => {
                 contract.bet(this.account.name, parseInt(amount * 10000), this.createHexRandom(),
                     { authorization: [`${this.account.name}@${this.account.authority}`] })
@@ -338,6 +368,11 @@ app = new Vue({
                 .catch((err) => {
                     alert(err.toString());
                 });
+            }else
+            {
+                //移动端
+                alert("bet")
+            }
         },
         roll_loop: function () {
             play_se("se_rolling");
@@ -363,7 +398,16 @@ app = new Vue({
                             this.speed += 20;
                         }
                     } else {
-                        this.balance();
+                        if(isPc()){
+                            this.balance();
+                        }else {
+                            if(this.tpConnected) {
+                                this.tpBalance();
+                            }else {
+                                alert("请下载TokenPocket或打开")
+                            }
+                        }
+
                     }
                 }
                 if (this.speed < 40) {
@@ -403,11 +447,35 @@ async function requestId() {
        //移动端
        app.tpConnected=tp.isConnected();
           if(app.tpConnected){
-              //test
-
           tp.getWalletList("eos").then(function (data) {
               app.tpAccount = data.wallets.eos[0]
               app.tpBalance();
+
+              tp.pushEosAction({
+                  actions: [
+                      {
+                          account: 'happyeosslot',
+                          name: 'bet',
+                          authorization: [
+                              {
+                                  actor: app.tpAccount.name,
+                                  permission: app.tpAccount.authority
+                              }],
+                          data: {
+                              account: app.tpAccount.name,
+                              bet:  parseInt(1 * 10000),
+                              speed: app.createHexRandom()
+                          }
+                      }
+                  ]
+              }).then(() => {
+              app.running = true;
+              app.old_credits = this.user_credits - 1;
+              app.old_bet_amount = 1;
+              app.roll_loop();
+          }).catch((err) => {
+                  alert(JSON.stringify(err));
+          })
            });
           }else{
               alert("请下载TokenPocket")//待完善
