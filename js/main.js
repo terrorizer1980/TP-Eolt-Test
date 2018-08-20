@@ -290,6 +290,7 @@ app = new Vue({
                     });
             }else{
                //tokenpocket
+                alert("sell" + JSON.stringify(this.tpAccount))
                 tp.pushEosAction({
                     actions: [
                         {
@@ -421,7 +422,7 @@ app = new Vue({
                 });
             }else
             {
-                alert("帐号："+ JSON.stringify(this.tpAccount))
+                // alert("帐号："+ JSON.stringify(this.tpAccount))
                 //移动端
                 tp.pushEosAction({
                     actions: [
