@@ -341,7 +341,7 @@ app = new Vue({
         init_tokenpocket:function () {
             if(tpConnected){
                 tp.getWalletList("eos").then(function (data) {
-                    app.tpAccount = data.wallets.eos[0]
+                    this.tpAccount = data.wallets.eos[0]
                 });
             }else {
                 alert("请下载TP,并登陆")
@@ -521,7 +521,7 @@ async function requestId() {
           if(app.tpConnected){
               await tp.getWalletList("eos").then(function (data) {
               app.tpAccount = data.wallets.eos[0]
-              // app.tpBalance();
+              app.tpBalance();
            });
           }else{
               alert("请下载TokenPocket")//待完善
