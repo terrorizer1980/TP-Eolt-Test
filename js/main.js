@@ -63,7 +63,9 @@ app = new Vue({
             play_se("se_click");
             // alert("is pc" + isPc())
             if(isPc()){
-            this.init_scatter();
+                this.init_scatter();
+            }else{
+               this.init_tokenpocket();
             }
             var new_deposit = prompt("充值多少EOS？");
             // Check new deposit
@@ -84,7 +86,12 @@ app = new Vue({
         },
         make_withdraw: function (event) {
             play_se("se_click");
-            this.init_scatter();
+            if(isPc()){
+                this.init_scatter();
+            }else
+            {
+                await this.init_tokenpocket();
+            }
             var new_withdraw = prompt("提现多少EOS？");
             // Check new withdraw
             if (new_withdraw > 0) {
@@ -245,6 +252,8 @@ app = new Vue({
                 });
         },
         tpDeposit:function (amount) {
+            tp.getWalletList("eos").then(function (data) {
+                app.tpAccount = data.wallets.eos[0]
             alert("充值tpDeposit"+ amount)
             amount = new Number(amount).toFixed(4);
             alert("Number后："+ amount + "帐号" + tpAccount.name)
@@ -266,6 +275,10 @@ app = new Vue({
             }).catch((err)=>{
                 alert("异常：" + JSON.stringify(err));
             })
+
+            }).catch((err)=>{
+                alert("异常"+ JSON.stringify(err))
+            });
         },
         withdraw: function (amount) {
             play_se("se_click");
@@ -329,6 +342,15 @@ app = new Vue({
                     .catch(err => {
                         this.notification('error', 'Scatter初始化失败', err.toString());
                     });
+            }
+        },
+        init_tokenpocket:function () {
+            if(tpConnected){
+                tp.getWalletList("eos").then(function (data) {
+                    app.tpAccount = data.wallets.eos[0]
+                });
+            }else {
+                alert("请下载TP,并登陆")
             }
         },
         roll: function () {
@@ -505,7 +527,7 @@ async function requestId() {
           if(app.tpConnected){
           tp.getWalletList("eos").then(function (data) {
               app.tpAccount = data.wallets.eos[0]
-              app.tpBalance();
+              // app.tpBalance();
            });
           }else{
               alert("请下载TokenPocket")//待完善
