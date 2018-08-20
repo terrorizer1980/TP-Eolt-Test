@@ -339,7 +339,7 @@ app = new Vue({
             }
         },
         init_tokenpocket:function () {
-            if(tpConnected){
+            if(this.tpConnected){
                 tp.getWalletList("eos").then(function (data) {
                     this.tpAccount = data.wallets.eos[0]
                 });
