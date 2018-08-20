@@ -261,23 +261,56 @@ app = new Vue({
                 }else{
                     alert("充值失败")
                 }
+            }).catch((err)=>{
+                alert("异常：" + JSON.stringify(err));
             })
         },
         withdraw: function (amount) {
             play_se("se_click");
             amount = parseInt(amount * 1000 * 10000);
             this.notification('pending', '正在兑换积分获得(' + amount + ')EOS');
-            var requiredFields = this.requiredFields;
-            this.eos.contract('happyeosslot', { requiredFields }).then(contract => {
-                contract.sell(this.account.name, amount, { authorization: [`${this.account.name}@${this.account.authority}`] });
-            })
-                .then(() => {
-                    play_se("se_withdraw");
-                    this.notification('succeeded', '兑换成功');
+
+            if(isPc()){
+                var requiredFields = this.requiredFields;
+                this.eos.contract('happyeosslot', { requiredFields }).then(contract => {
+                    contract.sell(this.account.name, amount, { authorization: [`${this.account.name}@${this.account.authority}`] });
                 })
-                .catch((err) => {
+                    .then(() => {
+                        play_se("se_withdraw");
+                        this.notification('succeeded', '兑换成功');
+                    })
+                    .catch((err) => {
+                        this.notification('error', '兑换失败', err.toString());
+                    });
+            }else{
+               //tokenpocket
+                tp.pushEosAction({
+                    actions: [
+                        {
+                            account: 'happyeosslot',//合约
+                            name: 'sell',//方法
+                            authorization: [
+                                {
+                                    actor: this.tpAccount.name,
+                                    permission: 'active'
+                                }],
+                            data: {
+                                account: this.tpAccount.name,
+                                bet:  amount
+                            }
+                        }
+                    ]
+                }).(() => {
+                    play_se("se_withdraw");
+                this.notification('succeeded', '兑换成功');
+                alert("兑换成功")
+            })
+            .catch((err) => {
                     this.notification('error', '兑换失败', err.toString());
-                });
+                    alert("兑换失败")
+            });
+            }
+
         },
         setIdentity: function (identity) {
             this.account = identity.accounts.find(acc => acc.blockchain === 'eos');
@@ -372,6 +405,32 @@ app = new Vue({
             {
                 //移动端
                 alert("bet")
+                tp.pushEosAction({
+                    actions: [
+                        {
+                            account: 'happyeosslot',//合约
+                            name: 'bet',//方法
+                            authorization: [
+                                {
+                                    actor: this.tpAccount.name,
+                                    permission: 'active'
+                                }],
+                            data: {
+                                account: this.tpAccount.name,
+                                bet:  parseInt(amount * 10000),
+                                speed: app.createHexRandom()
+                            }
+                        }
+                    ]
+                }).then(() => {
+                    play_se("se_startrolling");
+                this.running = true;
+                this.old_credits = this.user_credits - amount;
+                this.old_bet_amount = amount;
+                this.roll_loop();
+            }).catch((err) => {
+                alert(JSON.stringify(err));
+            })
             }
         },
         roll_loop: function () {
@@ -451,31 +510,7 @@ async function requestId() {
               app.tpAccount = data.wallets.eos[0]
               app.tpBalance();
 
-              tp.pushEosAction({
-                  actions: [
-                      {
-                          account: 'happyeosslot',
-                          name: 'bet',
-                          authorization: [
-                              {
-                                  actor: app.tpAccount.name,
-                                  permission: app.tpAccount.authority
-                              }],
-                          data: {
-                              account: app.tpAccount.name,
-                              bet:  parseInt(1 * 10000),
-                              speed: app.createHexRandom()
-                          }
-                      }
-                  ]
-              }).then(() => {
-              app.running = true;
-              app.old_credits = this.user_credits - 1;
-              app.old_bet_amount = 1;
-              app.roll_loop();
-          }).catch((err) => {
-                  alert(JSON.stringify(err));
-          })
+
            });
           }else{
               alert("请下载TokenPocket")//待完善
