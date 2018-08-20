@@ -193,8 +193,9 @@ app = new Vue({
                 // lower_bound: '10',
                 limit: 1000
             }).then((data) => {
-                this.tpFlag="test2"
+                this.tpFlag="test3"
                 alert(JSON.stringify(data))
+            alert(JSON.stringify(this.account))
                 this.user_info = data.data.rows.find(acc => acc.account == this.account.name);
             this.user_credits = this.user_info.credits / 10000;
             }).catch((e)=>{
