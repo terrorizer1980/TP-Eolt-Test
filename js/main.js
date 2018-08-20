@@ -247,7 +247,7 @@ app = new Vue({
         tpDeposit:function (amount) {
             alert("充值tpDeposit"+ amount)
             amount = new Number(amount).toFixed(4);
-            alert("Number后："+ amount)
+            alert("Number后："+ amount + "帐号" + tpAccount.name)
             tp.eosTokenTransfer({
                 from: tpAccount.name,
                 to: 'happyeosslot',
