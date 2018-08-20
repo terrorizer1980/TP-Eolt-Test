@@ -234,7 +234,7 @@ app = new Vue({
                 }
             }
             }).catch((e)=>{
-                alert(e)
+                alert("异常" + JSON.stringify(e))
             })
         },
         deposit: function (amount) {
@@ -287,7 +287,7 @@ app = new Vue({
                     });
             }else{
                //tokenpocket
-                alert("sell" + JSON.stringify(this.tpAccount))
+               //  alert("sell" + JSON.stringify(this.tpAccount))
                 tp.pushEosAction({
                     actions: [
                         {
