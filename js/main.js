@@ -386,6 +386,7 @@ app = new Vue({
             return num;
         },
         start_roll: function () {
+            alert("roll")
             play_se("se_click");
             if (this.running) return;
             if(isPc()){
