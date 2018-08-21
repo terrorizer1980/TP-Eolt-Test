@@ -25,7 +25,7 @@ body{
 	  position: absolute;
 	  background:#ff91de;
 	  border:6px solid #000000;
-	  width: 75%;
+	  width: 80%;
 	  /* height: 680px; */
 	  z-index: 10;
 	  margin: 10%;
@@ -422,7 +422,7 @@ body{
 	width: 50px;
 	height: 10px;
 	background: #000000;
-	right: 10px;
+	right: -5px;
 	top: 150px;
 	z-index: 12;
 }
@@ -432,7 +432,7 @@ body{
 	width: 10px;
 	height: 50px;
 	background: #000000;
-	right: 30px;
+	right: 10px;
 	top: 130px;
 }
 
@@ -440,10 +440,11 @@ body{
 	position: absolute;
 	width: 40px;
 	height: 40px;
-	bottom: 2px;
+	bottom: 90px;
 	margin: 2px;
 	border-radius: 100%;
-	/*background: url("../imges/pause.jpg") no-repeat;*/
+	/* background: url(../imges/pause.jpg) no-repeat; */
+	z-index: 12;
 }
 .music-play img:hover{
 	transform: scale(1.2);
