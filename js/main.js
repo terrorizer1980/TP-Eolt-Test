@@ -259,7 +259,7 @@ app = new Vue({
                 tokenName: 'EOS',
                 precision: 4,
                 contract: 'eosio.token',
-                memo: 'TokenPocket test'
+                memo: 'Buy Bet'
             }).then((data) => {
             if(data.result){
                 alert("充值成功："+ amount)
