@@ -307,10 +307,8 @@ app = new Vue({
                 }).then(() => {
                     play_se("se_withdraw");
                 this.notification('succeeded', '兑换成功');
-                alert("兑换成功")
             }).catch((err) => {
                     this.notification('error', '兑换失败', err.toString());
-                    alert("兑换失败")
             });
             }
 

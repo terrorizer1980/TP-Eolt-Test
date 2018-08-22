@@ -450,3 +450,8 @@ body{
 .music-play img:hover{
 	transform: scale(1.2);
 }
+
+.main-heard{
+	width: 100%;
+
+}
