@@ -11,7 +11,6 @@
 <link rel="stylesheet" type="text/css" href="css/cube-top.css">
 <link rel="stylesheet" type="text/css" href="css/cube.css">
 <link rel="stylesheet/less" type="text/css" href="css/main.less">
-
 <body>
         <div class="main" id="app">
 
@@ -49,6 +48,7 @@
                             </div>
                             <div class="credits">credits</div>
                             <div class="credits-num">{{ user_credits||0 }}</div>
+                            <div><input class="bet-sell" type="number" placeholder="充值或提现（EOS）" v-model="eosValue"></div>
                         </div>
                     </div>
                     <div class="center-box-bottom">
@@ -136,6 +136,8 @@
     <script src="js/config.js"></script>
     <script src="js/lib/tp.js"></script>
     <script src="js/main.js"></script>
+
+
     <script>
         setTimeout(function () {
             requestId(); // change to on load.

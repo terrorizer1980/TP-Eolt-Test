@@ -6,6 +6,7 @@ app = new Vue({
             notifications: [],
             notificationLock: false
         },
+        eosValue:"",
         requiredFields: null,
         eos: null,
         account: null,
@@ -67,7 +68,8 @@ app = new Vue({
             }else{
                this.init_tokenpocket();
             }
-            var new_deposit = prompt("充值多少EOS？");
+            var new_deposit = this.eosValue;//prompt("充值多少EOS？");
+
             // Check new deposit
             if (new_deposit > 0) {
                 // alert("is pc" + isPc())
@@ -81,6 +83,8 @@ app = new Vue({
                     }
 
                 }
+            }else{
+                this.notification('succeeded', '请输入EOS数额');
             }
         },
         make_withdraw: function (event) {
@@ -91,10 +95,12 @@ app = new Vue({
             {
                 this.init_tokenpocket();
             }
-            var new_withdraw = prompt("提现多少EOS？");
+            var new_withdraw =this.eosValue;// prompt("提现多少EOS？");
             // Check new withdraw
             if (new_withdraw > 0) {
                 this.withdraw(new_withdraw);
+            }else{
+                this.notification('succeeded', '请输入EOS数额');
             }
         },
         redirect: function (name, path, params, query) {

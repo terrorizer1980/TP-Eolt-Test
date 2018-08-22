@@ -13,6 +13,7 @@
     "http-server": "^0.11.1"
   },
   "dependencies": {
-    "eosjs": "^16.0.2"
+    "eosjs": "^16.0.2",
+    "mint-ui": "^2.2.13"
   }
 }

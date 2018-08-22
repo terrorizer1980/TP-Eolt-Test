@@ -450,6 +450,15 @@ body{
 .music-play img:hover{
 	transform: scale(1.2);
 }
+.bet-sell{
+	border-radius: 15px;
+	text-align: center;
+	height: 30px;
+	width: 90%;
+	margin-top: 20px;
+	margin-left: 4%;
+	font-size: 15px;
+}
 
 .main-heard{
 	width: 100%;
