@@ -77,7 +77,7 @@ app = new Vue({
                     if(this.tpConnected){
                         this.tpDeposit(new_deposit);
                     }else {
-                        alert("请下载安装TokenPocket")
+                        this.notification('succeeded', '请下载TokenPocket或打开');
                     }
 
                 }
@@ -234,7 +234,7 @@ app = new Vue({
                 }
             }
             }).catch((e)=>{
-                alert("异常" + JSON.stringify(e))
+            this.notification('error', '异常', e.toString());
             })
         },
         deposit: function (amount) {
@@ -262,12 +262,12 @@ app = new Vue({
                 memo: 'Buy Bet'
             }).then((data) => {
             if(data.result){
-                alert("充值成功："+ amount)
+                this.notification('succeeded', '兑换成功');
             }else{
-                alert("充值失败")
+                this.notification('error', '兑换失败',"");
             }
             }).catch((err)=>{
-                alert("异常：" + JSON.stringify(err));
+                this.notification('error', '兑换失败', err.toString());
             })
         },
         withdraw: function (amount) {
@@ -339,7 +339,7 @@ app = new Vue({
                     this.tpAccount = data.wallets.eos[0]
                 });
             }else {
-                alert("请下载TP,并登陆")
+                this.notification('succeeded', '请下载TP,并登陆');
             }
         },
         roll: function () {
@@ -409,11 +409,11 @@ app = new Vue({
                         this.old_bet_amount = amount;
                         this.roll_loop();
                     }).catch((err) => {
-                        alert(err.toString());
+                this.notification('error', '异常', err.toString());
                     })
             }).then(() => {
                 }).catch((err) => {
-                    alert(err.toString());
+                    this.notification('error', '异常', err.toString());
                 });
             }else
             {
@@ -443,7 +443,7 @@ app = new Vue({
                 this.old_bet_amount = amount;
                 this.roll_loop();
             }).catch((err) => {
-                alert(JSON.stringify(err));
+                this.notification('error', '异常', err.toString());
             })
             }
         },
@@ -477,7 +477,7 @@ app = new Vue({
                             if(this.tpConnected) {
                                 this.tpBalance();
                             }else {
-                                alert("请下载TokenPocket或打开")
+                                this.notification('succeeded', '请下载TokenPocket或打开');
                             }
                         }
 
@@ -525,7 +525,7 @@ async function requestId() {
               app.tpBalance();
            });
           }else{
-              alert("请下载TokenPocket")//待完善
+              app.notification('succeeded', '请下载TokenPocket或打开');
           }
        }
 };
