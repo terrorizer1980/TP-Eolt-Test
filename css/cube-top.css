@@ -8,8 +8,8 @@
     animation: rotateanimation 5s ease;
     animation-iteration-count: infinite;/*令动画无限执行下去*/
     animation-timing-function: linear;/*匀速*/
-    margin-top: 232%;
-    margin-left: 20px;
+    margin-top: 219%;
+    margin-left: 25px;
     transform: rotatex(-45deg) rotatez(-30deg) rotatey(-50deg) translatey(-10px);
     z-index: 12;
 }
