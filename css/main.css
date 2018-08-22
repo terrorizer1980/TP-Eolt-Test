@@ -305,7 +305,7 @@ body{
 	border-radius:8px;
 	width: 120px;
 	height: 47px;
-	z-index: 12;
+	z-index: 15;
 	position: absolute;
 	margin-top: -90px;
 	 left: 5px;
@@ -324,7 +324,7 @@ body{
 	border-radius:8px;
 	width: 120px;
 	height: 47px;
-	z-index: 12;
+	z-index: 15;
 	position: absolute;
 	bottom: -220px;
 	/* left: 400px; */
@@ -362,7 +362,7 @@ body{
 	border-radius:8px;
 	width: 120px;
 	height: 47px;
-	z-index: 12;
+	z-index: 15;
 	position: absolute;
 	margin-top: -90px;
 	 left: 140px;
@@ -380,7 +380,7 @@ body{
 	border-radius:8px;
 	width: 120px;
 	height: 47px;
-	z-index: 12;
+	z-index: 15;
 	position: absolute;
 	margin-top: -90px;
 	 left: 280px;
