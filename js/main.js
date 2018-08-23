@@ -31,7 +31,8 @@ app = new Vue({
         running: false, // 正在抽奖
         tpConnected:false,
         tpFlag:"",
-        tpAccount:''
+        tpAccount:'',
+        betValue: ''
     },
     created: function () {
     },
@@ -341,8 +342,17 @@ app = new Vue({
         },
         init_tokenpocket:function () {
             if(this.tpConnected){
-                tp.getWalletList("eos").then(function (data) {
+                /*tp.getWalletList("eos").then(function (data) {
                     this.tpAccount = data.wallets.eos[0]
+                });*/
+                tp.getCurrentWallet().then(function (data) {
+                    this.notification('succeeded', JSON.parse(data));
+                    if(data.result){
+                        this.tpAccount = data.data;
+                    }else{
+                        this.notification("error",data.msg);
+                    }
+
                 });
             }else {
                 this.notification('succeeded', '请下载TP,并登陆');
@@ -526,9 +536,15 @@ async function requestId() {
        //移动端
        app.tpConnected=tp.isConnected();
           if(app.tpConnected){
-              await tp.getWalletList("eos").then(function (data) {
-              app.tpAccount = data.wallets.eos[0]
-              app.tpBalance();
+              await tp.getCurrentWallet().then(function (data) {
+                  app.notification('succeeded', JSON.parse(data));
+                  if(data.result){
+                      app.tpAccount = data.data;
+                      app.tpBalance();
+                  }else{
+                      app.notification("error",data.msg);
+                  }
+
            });
           }else{
               app.notification('succeeded', '请下载TokenPocket或打开');

@@ -12,8 +12,9 @@
 <link rel="stylesheet" type="text/css" href="css/cube.css">
 <link rel="stylesheet/less" type="text/css" href="css/main.less">
 <body>
-        <div class="main" id="app">
 
+        <div class="main" id="app">
+            <a class="implement"  onclick="implementFun()" >游戏规则说明</a>
             <div class="adorn-top"></div>
             <div class="adorn-bottom"></div>
             <div class="box1-left">
@@ -43,12 +44,17 @@
                         <div class="center-box-center-left">
                             <div class="bet" onclick="app.change_bet()">Bet</div>
                             <div class="bet-num" onclick="app.change_bet()">{{ bet_input||0 }}
-
                                <!-- <span class="tooltiptext">点击修改Bet数额</span>-->
+                            </div>
+                            <div>
+                                <span class="tips">在此修改bet 10000 bet=1 EOS</span>
+                                <input class="bet-input" type="number" placeholder="10000 bet=1 EOS" v-model="bet_input">
                             </div>
                             <div class="credits">credits</div>
                             <div class="credits-num">{{ user_credits||0 }}</div>
-                            <div><input class="bet-sell" type="number" placeholder="充值或提现（EOS）" v-model="eosValue"></div>
+                            <div>
+                                <input class="bet-sell" type="number" placeholder="充值或提现（EOS）" v-model="eosValue">
+                            </div>
                         </div>
                     </div>
                     <div class="center-box-bottom">
@@ -107,7 +113,7 @@
             </div>
     </div>
 
-        <div>
+        <div id="divId">
             <img src="imges/des.png"  class="descripse">
         </div>
     <audio id="audioId" loop="loop" preload="auto" autoplay="autoplay">
@@ -153,6 +159,9 @@
         $("#musicId").on("click", function () {
             swap_music("imgId");
         })
+       function implementFun() {
+           document.getElementById("divId").scrollIntoView(false);
+       }
     </script>
 </body>
 
