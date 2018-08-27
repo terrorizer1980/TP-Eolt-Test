@@ -1,5 +1,8 @@
 /* jshint esversion: 6 */ 
-var ENV = 'mainnet';
+// var ENV = 'mainnet';
+
+var ENV = 'testnet';
+
 var network;
 var options;
 
@@ -24,18 +27,18 @@ if(ENV === 'dev'){
     // remote testnet
     network = {
         blockchain: 'eos',
-        host: '120.27.237.92',
-        port: 8888,
-        chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
+        host: 'api-kylin.eosasia.one',
+        port: 80,
+        chainId: "5fff1dae8dc8e2fc4d5b23b2c7665c97f9e9d8edf2b6485a86ba311c25639191",
         protocol: "http"
     };
     options = {
         broadcast: true,
         sign: true,
-        chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
-        httpEndpoint: "http://120.27.237.92:8888"
+        chainId: "5fff1dae8dc8e2fc4d5b23b2c7665c97f9e9d8edf2b6485a86ba311c25639191",
+        httpEndpoint: "http://api-kylin.eosasia.one:80"
     };
-} else if( ENV === 'mainnet'){
+ } else if( ENV === 'mainnet'){
     // mainnet
     network = {
         blockchain: 'eos',
