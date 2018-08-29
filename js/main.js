@@ -503,6 +503,7 @@ app = new Vue({
             }
         },
         getEosBalance:function () {
+            alert(this.tpAccount.name)
             tp.getEosBalance({
                 account: this.tpAccount.name,
                 contract: 'eosio.token',
