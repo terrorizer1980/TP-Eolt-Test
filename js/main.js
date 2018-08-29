@@ -56,10 +56,11 @@ app = new Vue({
             }
         },
         get_current_balance: function () {
-            this.get_current_eop();
             this.eos.getCurrencyBalance('eosio.token', this.account.name).then(x => {
+                alert(x);
                 this.user_eos_balance = x[0].split(' ', 1)[0];
-            });
+        });
+            this.get_current_eop();
         },
         get_current_eop: async function () {
             var happyeosslot_balance = await this.eos.getCurrencyBalance('eosio.token', 'happyeosslot');
@@ -501,17 +502,27 @@ app = new Vue({
                 this.get_current_balance();
             }
         },
+        getEosBalance:function () {
+            tp.getEosBalance({
+                account: this.tpAccount.name,
+                contract: 'eosio.token',
+                tokenName: 'EOS'
+            }).then((data)=>{
+                alert(JSON.stringify(data));
+                this.user_eos_balance = data.data.balance[0].split(' ', 1)[0];
+        })
+        },
     },
     computed: {}
 });
 
 async function requestId() {
     if (app.eos != null) return;
-    if (app.tpAccount != null) return;
+    // if (app.tpAccount != null) return;
     if (isPc()) {
         //PC端
         if (!('scatter' in window)) {
-            // alert("你需要Scatter来玩这个游戏");
+            alert("你需要Scatter来玩这个游戏");
         } else {
             const identity = await scatter.getIdentity({
                 accounts: [{
@@ -536,6 +547,7 @@ async function requestId() {
             // app.tpBalance();
             tp.getWalletList("eos").then(function (data) {
                 app.tpAccount = data.wallets.eos[0]
+                app.getEosBalance();
             });
         } else {
             alert("请下载TokenPocket") //待完善
