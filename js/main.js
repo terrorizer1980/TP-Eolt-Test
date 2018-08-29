@@ -487,6 +487,7 @@ app = new Vue({
                 this.prize = stop_position;
                 this.tpGetRollResult();
             }
+            this.getEosBalance();
         },
         getEosBalance:function () {
             var thiz = this;
