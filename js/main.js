@@ -485,7 +485,7 @@ app = new Vue({
             if (this.prize == -1) {
                 clearTimeout(this.result_timer);
                 this.prize = stop_position;
-                this.getEosBalance();
+                this.tpGetRollResult();
             }
         },
         getEosBalance:function () {
