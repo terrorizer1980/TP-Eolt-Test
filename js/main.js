@@ -179,39 +179,39 @@ app = new Vue({
                 limit: 10,
                 table: 'result'
             }).then((data) => {
-                this.tpFlag="test5"
-                this.user_info = data.data.rows.find(acc => acc.account == this.tpAccount.name);
-                this.user_credits = this.user_info.credits / 10000;
-                var rate_100 = 25;
-                var rate_50 = new Array(11, 24);
-                var rate_20 = new Array(6, 16, 21);
-                var rate_10 = new Array(1, 10, 26);
-                var rate_5 = new Array(3, 13, 18, 21);
-                var rate_2 = new Array(2, 8, 17, 28);
-                var rate_0_1 = new Array(5, 9, 12, 14, 19);
-                var rate_0_0_1 = new Array(4, 7, 15, 20, 23, 27);
+                var result = data.data.rows.roll_number;
+            this.bet_result = result;
 
+            var rate_100 = 25;
+            var rate_50 = new Array(11, 24);
+            var rate_20 = new Array(6, 16, 21);
+            var rate_10 = new Array(1, 10, 26);
+            var rate_5 = new Array(3, 13, 18, 22);
+            var rate_2 = new Array(2, 8, 17, 28);
+            var rate_0_1 = new Array(5, 9, 12, 14, 19);
+            var rate_0_0_1 = new Array(4, 7, 15, 20, 23, 27);
 
             if (this.running) {
-                if (this.user_credits != this.old_credits) {
-                    var last_rate = (this.user_credits - this.old_credits) / this.old_bet_amount;
-                    if (last_rate >= 80) {
-                        this.stop_at(rate_100);
-                    } else if (last_rate >= 40) {
-                        this.stop_at(rate_50[Math.floor(Math.random() * 2)]);
-                    } else if (last_rate >= 15) {
-                        this.stop_at(rate_20[Math.floor(Math.random() * 3)]);
-                    } else if (last_rate >= 8) {
-                        this.stop_at(rate_10[Math.floor(Math.random() * 3)]);
-                    } else if (last_rate >= 3) {
-                        this.stop_at(rate_5[Math.floor(Math.random() * 4)]);
-                    } else if (last_rate >= 1) {
-                        this.stop_at(rate_2[Math.floor(Math.random() * 4)]);
-                    } else if (last_rate >= 0.05) {
-                        this.stop_at(rate_0_1[Math.floor(Math.random() * 5)]);
-                    } else if (last_rate >= 0.005) {
-                        this.stop_at(rate_0_0_1[Math.floor(Math.random() * 6)]);
-                    }
+                var random = Math.random();
+                // console.log(random);
+                if (result >= 10000) {
+                    this.stop_at(rate_100);
+                } else if (result >= 5000) {
+                    this.stop_at(rate_50[Math.floor(random) * 2]);
+                } else if (result >= 2000) {
+                    this.stop_at(rate_20[Math.floor(random * 3)]);
+                } else if (result >= 1000) {
+                    this.stop_at(rate_10[Math.floor(random * 3)]);
+                } else if (result >= 500) {
+                    this.stop_at(rate_5[Math.floor(random * 4)]);
+                } else if (result >= 200) {
+                    this.stop_at(rate_2[Math.floor(random * 4)]);
+                } else if (result >= 10) {
+                    this.stop_at(rate_0_1[Math.floor(random * 5)]);
+                } else if (result >= 1) {
+                    this.stop_at(rate_0_0_1[Math.floor(random * 6)]);
+                } else {
+                    this.result_timer = setTimeout(this.tpGetRollResult, 100); //循环调用
                 }
             }
             }).catch((err) => {
@@ -427,7 +427,6 @@ app = new Vue({
             {
                 // alert("帐号："+ JSON.stringify(this.tpAccount))
                 //移动端
-                amount = new Number(amount).toFixed(4);
                 tp.eosTokenTransfer({
                     from: this.tpAccount.name,
                     to: 'happyeosslot',
@@ -435,13 +434,14 @@ app = new Vue({
                     tokenName: 'EOS',
                     precision: 4,
                     contract: 'eosio.token',
-                    memo: 'bet'
+                    memo: 'bet'+ this.createHexRandom(),
+                    address:this.tpAccount.address
                 }).then(() => {
                     play_se("se_startrolling");
                 this.running = true;
                 this.last_bet = amount;
                 this.roll_loop();
-                this.getEosBalance();
+                this.tpGetRollResult();
                 }).catch((err) => {
                     this.notification('error', '异常', err.toString());
                 })
@@ -470,17 +470,6 @@ app = new Vue({
                         } else {
                             this.speed += 20;
                         }
-                    } else {
-                        if(isPc()){
-                            
-                        }else {
-                            if(this.tpConnected) {
-                                this.tpBalance();
-                            }else {
-                                this.notification('succeeded', '请下载TokenPocket或打开');
-                            }
-                        }
-
                     }
                 }
                 if (this.speed < 40) {
