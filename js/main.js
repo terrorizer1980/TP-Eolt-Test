@@ -179,8 +179,8 @@ app = new Vue({
                 limit: 10,
                 table: 'result'
             }).then((data) => {
-                var result = data.data.rows.roll_number;
-            this.bet_result = result;
+                var result = data.data.rows[0].roll_number;
+                this.bet_result = result;
 
             var rate_100 = 25;
             var rate_50 = new Array(11, 24);
