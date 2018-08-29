@@ -10,7 +10,7 @@ app = new Vue({
         requiredFields: null,
         eos: null,
         account: null,
-        user_eos_balance: 0,
+        user_eos_balance: "0",
         last_bet: null,
         bet_input: "1.0000",
         bet_result: null,
@@ -55,13 +55,12 @@ app = new Vue({
                 this.bet_input = new Number(new_bet).toFixed(4);
             }
         },
-        get_current_balance: function () {
+      /*  getEosBalance: function () {
             this.eos.getCurrencyBalance('eosio.token', this.account.name).then(x => {
-                alert(x);
                 this.user_eos_balance = x[0].split(' ', 1)[0];
         });
             this.get_current_eop();
-        },
+        },*/
         get_current_eop: async function () {
             var happyeosslot_balance = await this.eos.getCurrencyBalance('eosio.token', 'happyeosslot');
             var happyeosslot_true_balance =
@@ -226,7 +225,7 @@ app = new Vue({
             this.eos.transfer(this.account.name, "happyeosslot", amount + " EOS", "buy")
                 .then(() => {
                     play_se("se_buy");
-                    this.get_current_balance();
+                    this.getEosBalance();
                     alert("充值成功");
                 }).catch((err) => {
                     alert(err.toString());
@@ -245,7 +244,7 @@ app = new Vue({
             }).then((data) => {
             if (data.result) {
                 alert("充值成功：" + amount)
-                this.get_current_balance();
+                this.getEosBalance();
             } else {
                 this.notification('error', '兑换失败',"");
             }
@@ -268,7 +267,7 @@ app = new Vue({
                 })
                 .then(() => {
                         play_se("se_withdraw");
-                        this.get_current_balance();
+                        this.getEosBalance();
                     }).catch((err) => {
                         alert(err.toString());
                     });
@@ -307,7 +306,7 @@ app = new Vue({
             this.requiredFields = {
                 accounts: [network]
             };
-            this.get_current_balance();
+            this.getEosBalance();
         },
         init_scatter: function () {
             if (this.eos != null) return;
@@ -345,12 +344,10 @@ app = new Vue({
         },
         init_tokenpocket:function () {
             if(this.tpConnected){
-               /* tp.getWalletList("eos").then(function (data) {
-                    this.tpAccount = data.wallets.eos[0]
-                });*/
                 tp.getCurrentWallet("eos").then(function (data) {
                     if(data.result){
                         this.tpAccount = data.data;
+                        this.getEosBalance()
                     }else{
                         this.notification("error",data.msg);
                     }
@@ -441,10 +438,10 @@ app = new Vue({
                     memo: 'bet'
                 }).then(() => {
                     play_se("se_startrolling");
-                    this.running = true;
-                    this.old_credits = this.user_credits - amount;
-                    this.old_bet_amount = amount;
-                    this.roll_loop();
+                this.running = true;
+                this.last_bet = amount;
+                this.roll_loop();
+                this.getEosBalance();
                 }).catch((err) => {
                     this.notification('error', '异常', err.toString());
                 })
@@ -499,20 +496,23 @@ app = new Vue({
             if (this.prize == -1) {
                 clearTimeout(this.result_timer);
                 this.prize = stop_position;
-                this.get_current_balance();
+                this.getEosBalance();
             }
         },
         getEosBalance:function () {
-            alert(this.tpAccount.name)
+            var thiz = this;
             tp.getEosBalance({
                 account: this.tpAccount.name,
                 contract: 'eosio.token',
-                tokenName: 'EOS'
-            }).then((data)=>{
-                alert(JSON.stringify(data));
-                this.user_eos_balance = data.data.balance[0].split(' ', 1)[0];
+                symbol: 'EOS'
+            }).then(function(data){
+                var balance = data.data.balance[0].split(' ')
+                thiz.user_eos_balance = balance[0];
         })
         },
+        getBalanceTimer:function(){
+            setTimeout(this.getEosBalance(),5000);
+        }
     },
     computed: {}
 });
@@ -544,11 +544,9 @@ async function requestId() {
         //移动端
         app.tpConnected = tp.isConnected();
         if (app.tpConnected) {
-            //test
-            // app.tpBalance();
             tp.getWalletList("eos").then(function (data) {
-                app.tpAccount = data.wallets.eos[0]
-                app.getEosBalance();
+                app.tpAccount = data.wallets.eos[0];
+                app.getEosBalance()
             });
         } else {
             alert("请下载TokenPocket") //待完善
