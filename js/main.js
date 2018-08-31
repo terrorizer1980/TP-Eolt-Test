@@ -6,7 +6,7 @@ app = new Vue({
             notifications: [],
             notificationLock: false
         },
-        eosValue:"",
+        eosValue:"1.000",
         requiredFields: null,
         eos: null,
         account: null,
@@ -27,7 +27,8 @@ app = new Vue({
         prize: -1,      //中奖位置
         running: false, // 正在抽奖
         tpConnected: false,
-        eop: 1, // 经营状况系数
+        eop: 1.000, // 经营状况系数
+        user_hpy_balance:0,
         tpAccount: null
     },
     created: function () {},
@@ -74,7 +75,31 @@ app = new Vue({
             happyeosslot_balance = happyeosslot_balance[0].split(' ', 1)[0];
             //this.eop = happyeosslot_true_balance;
             happyeosslot_true_balance = happyeosslot_true_balance.rows[0].deposit.balance.split(' ', 1)[0];
-            this.eop = happyeosslot_balance / (happyeosslot_true_balance - 10000);
+            this.eop = happyeosslot_balance / (happyeosslot_true_balance - 1250);
+            //this.eop = new Number(this.eop).toFixed(4);
+            return this.eop;
+        },
+        get_current_eop_tp: async function(){
+            var happyeosslot_balance = await tp.getEosBalance({
+                account: 'happyeosslot',
+                contract: 'eosio.token',
+                symbol: 'EOS'
+            }).then(function(data){
+                var balance = data.data.balance[0].split(' ')
+                return balance[0];
+            })
+            var happyeosslot_true_balance =
+                await tp.getTableRows({
+                json: "true",
+                code: "happyeosslot",
+                scope: "happyeosslot",
+                limit: 10,
+                table: 'market'
+            });
+            // happyeosslot_balance = happyeosslot_balance[0].split(' ', 1)[0];
+            //this.eop = happyeosslot_true_balance;
+            happyeosslot_true_balance = happyeosslot_true_balance.data.rows[0].deposit.balance.split(' ', 1)[0];
+            this.eop = happyeosslot_balance / (happyeosslot_true_balance - 1250);
             //this.eop = new Number(this.eop).toFixed(4);
             return this.eop;
         },
@@ -180,7 +205,7 @@ app = new Vue({
                 table: 'result'
             }).then((data) => {
                 var result = data.data.rows[0].roll_number;
-                this.bet_result = result;
+            this.bet_result = result;
 
             var rate_100 = 25;
             var rate_50 = new Array(11, 24);
@@ -243,13 +268,13 @@ app = new Vue({
                 memo: 'buy'
             }).then((data) => {
             if (data.result) {
-                alert("充值成功：" + amount)
                 this.getEosBalance();
+                this.notification('success','购买股份成功',amount);
             } else {
-                this.notification('error', '兑换失败',"");
+                this.notification('error', '购买股份失败',"");
             }
             }).catch((err)=>{
-                this.notification('error', '兑换失败', err.toString());
+                this.notification('error', '购买失败', err.toString());
             })
         },
         withdraw: function (amount) {
@@ -273,7 +298,6 @@ app = new Vue({
                     });
             }else{
                //tokenpocket
-               //  alert("sell" + JSON.stringify(this.tpAccount))
                 tp.pushEosAction({
                     actions: [
                         {
@@ -286,16 +310,17 @@ app = new Vue({
                                 }],
                             data: {
                                 account: this.tpAccount.name,
-                                credits:  amount
-                            }
+                                hpy:  amount + " HPY"
+                            },
+                            address: this.tpAccount.address
                         }
                     ]
                 }).then(() => {
-                    this.tpBalance();
+                    this.getEosBalance();
                     play_se("se_withdraw");
-                this.notification('succeeded', '兑换成功');
+                this.notification('succeeded', '完成出售HPY交易');
             }).catch((err) => {
-                    this.notification('error', '兑换失败', err.toString());
+                    this.notification('error', '出售HPY失败', err.toString());
             });
             }
 
@@ -491,6 +516,17 @@ app = new Vue({
         },
         getEosBalance:function () {
             var thiz = this;
+            this.get_current_eop_tp();
+
+            tp.getEosBalance({
+                account: this.tpAccount.name,
+                contract: 'happyeosslot',
+                symbol: 'HPY'
+            }).then(function(data){
+                var balance = data.data.balance[0].split(' ')
+                thiz.user_hpy_balance = balance[0];
+            })
+
             tp.getEosBalance({
                 account: this.tpAccount.name,
                 contract: 'eosio.token',
@@ -499,6 +535,20 @@ app = new Vue({
                 var balance = data.data.balance[0].split(' ')
                 thiz.user_eos_balance = balance[0];
         })
+            this.fetch_action;
+        },
+        fetch_action: async function() {
+            // Sorry SuperONE, EOSAsia have the BETTER get_actions API than yours,
+            const {data} = await axios({
+                method:'post',
+                url: 'https://api1.eosasia.one/v1/history/get_actions',
+                headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                data: {"account_name":"happyeosslot","pos":-1,"offset":-300}
+            })
+            this.actions = data.actions
+                    .map(({action_trace}) => action_trace.act.data)
+        .filter(action => action.quantity) // No Reveal Blank Data will be shown
+            // alert(res)
         },
         getBalanceTimer:function(){
             setTimeout(this.getEosBalance(),5000);

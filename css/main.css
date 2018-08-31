@@ -118,17 +118,17 @@ body{
 }
 
 .bet{
-	height: 50px;
-	font-size: 30px;
+	/* height: 50px; */
+	font-size: 22px;
 	color: #f6ff00;
 	letter-spacing: 0;
 	text-align: center;
 	font-weight: 800;
-	margin-top: 30px;
+	margin-top: 15px;
 	text-shadow: 5px 5px 5px #000000;
 }
 .bet-num{
-	font-size: 30px;
+	font-size: 20px;
 	color: #ffffff;
 	letter-spacing: 0;
 	text-align: center;
@@ -308,7 +308,7 @@ body{
 	z-index: 15;
 	position: absolute;
 	margin-top: -90px;
-	left: 90px;
+	left: -8px;
 	font-size: 15px;
 	color: #000000;
 	letter-spacing: 0;
@@ -457,7 +457,8 @@ body{
 	width: 90%;
 	margin-top: 20px;
 	margin-left: 4%;
-	font-size: 15px;
+	font-size: 12px;
+	font-weight: 600;
 }
 
 .bet-input {
@@ -474,7 +475,7 @@ body{
 	font-size: 10px;
 	position: absolute;
 	margin-top: 7px;
-	margin-left: 10%;
+	margin-left: 5%;
 }
 .implement{
 	color: #ffffff;
@@ -498,9 +499,7 @@ body{
 }
 .main-heard{
 	width: 100%;
-
 }
-
 
 .header-content{
 	width: 100%;
@@ -528,3 +527,4 @@ li a{
 li a:hover{
 	color: blue;
 }
+
