@@ -504,7 +504,7 @@ body{
 .header-content{
 	width: 100%;
 	height: 5px;
-	margin: 5px;
+	margin: 1px 5px 10px -23px;
 }
 .header-content ul{
 	display: none;
@@ -516,10 +516,17 @@ body{
 	width: 200px;
 	color: #ffffff;
 	font-size: 18px;
+	background: #ffff00;
+	border: 2px solid #000000;
+	border-radius: 10px 10px 0 0;
+	/* height: 70px; */
+	text-align: center;
+	margin: 2px;
 }
 li a{
-	/*text-decoration: none;*/
-	color: #ffffff;
+	text-decoration: none;
+	color: #000000;
+	font-family: WenYue-XinQingNianTi-NC-W8;
 }
 .header-content ul li:hover{
 	color: blue;
