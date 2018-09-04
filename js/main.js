@@ -369,9 +369,9 @@ app = new Vue({
                 if (this.tpConnected) {
                     //test
                     // app.tpBalance();
-                    tp.getWalletList("eos").then(function (data) {
-                        this.tpAccount = data.wallets.eos[0];
-                    });
+                    tp.getCurrentWallet("EOS").then( (data) => {
+                        this.tpAccount = data.data;
+                });
                 } else {
                     alert("请下载TokenPocket") //待完善
                 }
@@ -594,10 +594,14 @@ async function requestId() {
         //移动端
         app.tpConnected = tp.isConnected();
         if (app.tpConnected) {
-            tp.getWalletList("eos").then(function (data) {
+           /* tp.getWalletList("eos").then(function (data) {
                 app.tpAccount = data.wallets.eos[0];
                 app.getEosBalance()
-            });
+            });*/
+            tp.getCurrentWallet("EOS").then( (data) => {
+                app.tpAccount = data.data;
+            app.getEosBalance()
+        });
         } else {
             alert("请下载TokenPocket") //待完善
         }
